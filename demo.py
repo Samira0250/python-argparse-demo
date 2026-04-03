@@ -1,72 +1,78 @@
 #! /usr/bin/env python3
 
-"A demonstration of using the argparse module to process command-line arguments."
+"A demostration of using the argparse module to process command-line arguments."
 
 import argparse
 
 if __name__ == '__main__':
     # Create a command-line parser object
+    # We will specify a `formatter_class` that includes the default values for
+    # arguments in the help documentation.
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class = argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    # Positional argument: one or more file paths
+    # This `add_argument` method specifies that this script expects 1 or more
+    # file paths as positional arguments
     parser.add_argument(
-        'file_path',
-        type=str,
-        metavar='FILE-PATH',
-        nargs='+',
-        help='Path(s) to text file(s) to search.',
+        'file_path',                # The name we'll use to access this argument
+        type = str,                  # The type of the argument
+        metavar = 'FILE-PATH',       # The placeholder name in the help menu
+        nargs = '+',                 # We expect 1 or more file paths
+        help = 'A path to a file.',  # The help menu text
     )
 
-    # Optional integer argument
+    # Using the `add_argument` method again to create an optional keyword
+    # argument for an integer
     parser.add_argument(
-        '-n', '--number',
-        type=int,
-        default=1,
-        help='An integer.',
+        '-n', '--number',     # The flags used to specify this option
+        type = int,
+        default = 1,          # Specifying a default value
+        help = 'An integer.',
     )
 
-    # Optional floating-point argument
+    # Adding another optional keyword argument for a floating-point number
     parser.add_argument(
         '-t', '--threshold',
-        type=float,
-        default=3.4,
-        help='A super duper important threshold.',
+        type = float,
+        default = 3.4,
+        help = 'A super duper important threshold.',
     )
 
-    # Optional boolean argument
+    # Adding another optional boolean keyword argument
     parser.add_argument(
         '-c', '--i-am-cool',
-        default=False,
-        action='store_true',
-        help='A boolean option.',
+        default = False,
+        action = 'store_true',
+        help = 'A boolean option.',
     )
 
-    # ✨ New optional argument: your field of interest
-    parser.add_argument(
-        '--field',
-        type=str,
-        default='biomedical science',
-        help='Your field of interest (e.g., neuroscience).'
-    )
+    # Adding the  argument to ask about the field of interest
+    parser.add_argument('--field', type=str, default='biomedical science', help='Your field of interest (e.g., neuroscience).')
 
-    # Parse the arguments
+    # Parse the command-line arguments into a 'dict'-like container
     args = parser.parse_args()
 
-    # Print all parsed arguments
+    # What does `args` object "look" like?
     print(
         "The args after being processed by the argparse parser object:\n",
-        args
-    )
+        args)
 
-    # Access positional argument
+    # We access the arguments specified on the command line (or the default
+    # values if they were not used) by using `args.` syntax.
+    #
+    # For positional arguments (like the first `add_argument` above), we access
+    # the value of the arugment using the name we provided as the first
+    # argument ("paths")
     print("Paths:", args.file_path)
 
-    # Access other keyword arguments
+    # For keyword arguments (like all the rest of the `add_argument` calls
+    # above), we access the value of the argument using the the long form of
+    # the keyword flag (removing the first two dashes and replacing any other
+    # dashes with underscores)
     print("Number:", args.number)
     print("Threshold:", args.threshold)
     print("I am cool?", args.i_am_cool)
 
-    # Access your new field argument
-    print(f"Running this search as a {args.field} Brain researcher")
+    # Print the field of interest
+    print("Field:", args.field)
